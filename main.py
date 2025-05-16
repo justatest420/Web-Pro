@@ -8,7 +8,7 @@ app.config['FILE_DIRECTORY'] = '/'  # Configure your directory
 
 @app.route('/')
 def serve_html():
-    return send_from_directory('HTML', 'nepal.html') # /.html
+    return send_from_directory('Web', 'nepal.html') # /.html
 
 def get_directory_structure(rootdir):
     """
