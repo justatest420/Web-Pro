@@ -10,42 +10,25 @@ app.config['FILE_DIRECTORY'] = '/'  # Configure your directory
 def serve_html():
     return send_from_directory('HTML', 'nepal.html') # /.html
 
+def get_directory_structure(rootdir):
+    """
+    Creates a nested dictionary that represents the folder structure of rootdir
+    """
+    dir_structure = {}
+    rootdir = rootdir.rstrip(os.sep)
+    start = rootdir.rfind(os.sep) + 1
+    for path, dirs, files in os.walk(rootdir):
+        folders = path[start:].split(os.sep)
+        subdir = dict.fromkeys(files)
+        parent = reduce(dict.get, folders[:-1], dir_structure)
+        parent[folders[-1]] = subdir
+    return dir_structure
+
 @app.route('/api/files', methods=['GET'])
-def list_files():
-    try:
-        # Optional query parameters
-        file_type = request.args.get('type', None)
-        sort_by = request.args.get('sort', 'name')
-        
-        files = []
-        for item in os.listdir(app.config['FILE_DIRECTORY']):
-            item_path = os.path.join(app.config['FILE_DIRECTORY'], item)
-            
-            if os.path.isfile(item_path):
-                # Skip if file type filter doesn't match
-                if file_type and not item.lower().endswith(file_type.lower()):
-                    continue
-                    
-                files.append({
-                    'name': item,
-                    'size': os.path.getsize(item_path),
-                    'modified': os.path.getmtime(item_path),
-                    'type': os.path.splitext(item)[1][1:].lower() or 'unknown'
-                })
-        
-        # Sort results
-        reverse_sort = sort_by.startswith('-')
-        sort_key = sort_by.lstrip('-')
-        files.sort(key=lambda x: x.get(sort_key, ''), reverse=reverse_sort)
-        
-        return jsonify({
-            'path': app.config['FILE_DIRECTORY'],
-            'count': len(files),
-            'files': files
-        })
-    
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+def directory_structure():
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    structure = get_directory_structure(project_root)
+    return jsonify(structure)
 
 
 if __name__ == '__main__':
