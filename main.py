@@ -3,12 +3,14 @@ import os
 from werkzeug.utils import secure_filename
 from functools import reduce
 
-app = Flask(__name__)
-app.config['FILE_DIRECTORY'] = '/'  # Configure your directory
+app = Flask(__name__, static_folder='Web', static_url_path='/Web')
+app.config['FILE_DIRECTORY'] = '/'
+
 
 @app.route('/')
 def serve_html():
     return send_from_directory('Web', 'nepal.html') # /.html
+
 
 def get_directory_structure(rootdir):
     """
@@ -24,11 +26,14 @@ def get_directory_structure(rootdir):
         parent[folders[-1]] = subdir
     return dir_structure
 
+
+
 @app.route('/api/files', methods=['GET'])
 def directory_structure():
     project_root = os.path.dirname(os.path.abspath(__file__))
     structure = get_directory_structure(project_root)
     return jsonify(structure)
+
 
 
 if __name__ == '__main__':
