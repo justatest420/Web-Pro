@@ -1,39 +1,18 @@
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, Blueprint
 import os
-from werkzeug.utils import secure_filename
-from functools import reduce
 
-app = Flask(__name__, static_folder='Web', static_url_path='/Web')
-app.config['FILE_DIRECTORY'] = '/'
+app = Flask(__name__, static_folder='Web', static_url_path='')
+
+webs = Blueprint('webs', __name__, static_folder='Web', static_url_path='/Web')
+app.register_blueprint(webs)
+
+images = Blueprint('images', __name__, static_folder='Images', static_url_path='/Images')
+app.register_blueprint(images)
 
 
 @app.route('/')
 def serve_html():
     return send_from_directory('Web', 'nepal.html') # /.html
-
-
-def get_directory_structure(rootdir):
-    """
-    Creates a nested dictionary that represents the folder structure of rootdir
-    """
-    dir_structure = {}
-    rootdir = rootdir.rstrip(os.sep)
-    start = rootdir.rfind(os.sep) + 1
-    for path, dirs, files in os.walk(rootdir):
-        folders = path[start:].split(os.sep)
-        subdir = dict.fromkeys(files)
-        parent = reduce(dict.get, folders[:-1], dir_structure)
-        parent[folders[-1]] = subdir
-    return dir_structure
-
-
-
-@app.route('/api/files', methods=['GET'])
-def directory_structure():
-    project_root = os.path.dirname(os.path.abspath(__file__))
-    structure = get_directory_structure(project_root)
-    return jsonify(structure)
-
 
 
 if __name__ == '__main__':
