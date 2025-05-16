@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, send_from_directory
 import os
 from werkzeug.utils import secure_filename
-
+from functools import reduce
 
 app = Flask(__name__)
 app.config['FILE_DIRECTORY'] = '/'  # Configure your directory
