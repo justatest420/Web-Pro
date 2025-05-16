@@ -21,7 +21,7 @@ body {
 /* Header Styles */
 header {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                url('https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+                url('./Images/pngtree-the-himalayas-in-nepal-image_15927109.jpg');
     background-size: cover;
     background-position: center;
     height: 100vh;
