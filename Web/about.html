@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Master! </title>
+        <style>
+            .code-container {
+                display: flex;
+                justify-content: center;
+                margin: 30px 0;
+            }
+
+            pre {
+                background: #2d2d2d; 
+                color: #f8f8f2;
+                padding: 20px;
+                border-radius: 8px;
+                width: 80%;
+                max-width: 800px;
+                overflow-x: auto;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                font-family: 'Consolas', 'Monaco', monospace;
+            }
+        </style>
+    </head>
+
+    <body background="https://parallel-gertruda-wizardzz-fb37ac55.koyeb.app/Images/naruto_shippuden_pain_hd_naruto_jpeg-1280x720.jpg">
+        <div class="code-container">
+                <pre>
+                    <b>BackEnd: Flask(Python)</b>
+                    <code class="language-python">
+# Created By Using Python and Hosted AT Koyeb 
+
+from flask import Flask, jsonify, request, send_from_directory, Blueprint
+import os
+                    
+app = Flask(__name__, static_folder='Web', static_url_path='')
+                    
+webs = Blueprint('webs', __name__, static_folder='Web', static_url_path='/Web')
+app.register_blueprint(webs)
+                    
+images = Blueprint('images', __name__, static_folder='Images', static_url_path='/Images')
+app.register_blueprint(images)
+                    
+@app.route('/')
+def serve_html():
+    return send_from_directory('Web', 'nepal.html') # /.html
+                    
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True)
+                </code>
+            </pre>
+        </div>
+
+    </body>
+</html>
